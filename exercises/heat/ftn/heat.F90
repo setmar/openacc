@@ -157,6 +157,8 @@ contains
     pdata => prev % data
     
     ! TODO: Implement computation on device with OpenACC
+    !$acc parallel loop private(i,j) copyin(pdata(0:nx+1,0:ny+1)) &
+    !$acc               copyout(cdata(0:nx+1,0:ny+1)) collapse(2)
     do j = 1, ny
        do i = 1, nx
           cdata(i, j) = pdata(i, j) + a * dt * &
@@ -166,6 +168,7 @@ contains
                &   pdata(i, j+1)) / dy2)
        end do
     end do
+    !$acc end parallel loop
   end subroutine evolve
 
   ! Output routine, saves the temperature distribution as a png image

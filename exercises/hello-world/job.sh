@@ -1,9 +1,10 @@
 #!/bin/bash
-#SBATCH --account=FIXME
-#SBATCH --ntasks=1
+#SBATCH --account=project_2000745
+#SBATCH --ntasks=4
 #SBATCH --time=00:15:00
 #SBATCH --gres=gpu:v100:1
-#SBATCH --partition=gputest
+#SBATCH --partition=gpu
+#SBATCH --reservation=openacc2020
 
 module load pgi/19.7 cuda/10.1.168
 
@@ -13,5 +14,5 @@ srun ./hello
 #  sbatch job.sh
 
 # or alternatively, run directly from the command line:
-#  srun --account=FIXME --ntasks=1 --time=00:15:00 --gres=gpu:v100:1 \
+#  srun --account=project_2000745 --ntasks=1 --time=00:15:00 --gres=gpu:v100:1 \
 #       --partition=gputest ./hello

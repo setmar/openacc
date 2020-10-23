@@ -19,13 +19,13 @@ main.o: pngwriter.o heat.o main.F90
 heat.o: heat.F90
 
 $(EXE): $(OBJS) .ALWAYSEXEC
-	$(FC) $(FCFLAGS) $(OBJS) -o $@ -lpng
+	$(FC) $(FCFLAGS) $(OBJS) -o $@ -acc -lpng
 
 pngwriter.o: pngwriter.c
 	$(CC) $(CCFLAGS) -c $< -o $@
 
 %.o: %.F90
-	$(FC) $(FCFLAGS) -c $< -o $@
+	$(FC) $(FCFLAGS) -c $< -acc -o $@
 
 clean:
 	-/bin/rm -f $(EXE)

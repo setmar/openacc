@@ -66,6 +66,8 @@ module matrix_mod
     arow_offsets(num_rows+1) = idx
     a%nnz = idx-1
 
+    !$acc enter data copyin(arow_offsets,acols,acoefs)
+
     end subroutine allocate_3d_poisson_matrix
   
   subroutine free_matrix(a)
@@ -77,10 +79,11 @@ module matrix_mod
     arow_offsets => a%row_offsets
     acols => a%cols
     acoefs => a%coefs
-   
+  
+    !$acc exit data delete(arow_offsets,acols,acoefs)
     deallocate(arow_offsets)
     deallocate(acols)
-    deallocate(acoefs)
+    deallocate(acoefs) 
   end subroutine free_matrix
 
   subroutine matvec(a, x, y)
@@ -96,7 +99,7 @@ module matrix_mod
     acols => a%cols
     acoefs => a%coefs
 
-    !$acc kernels
+    !$acc kernels present(arow_offsets,acols,acoefs,x,y)
     do i=1,a%num_rows
       tmpsum = 0.0d0
       row_start = arow_offsets(i)

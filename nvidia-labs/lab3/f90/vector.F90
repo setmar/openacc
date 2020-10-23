@@ -8,16 +8,19 @@ module vector_mod
     real(8), intent(out) :: vector(:)
     real(8), intent(in)  :: value
     vector(:) = value
+    !$acc update device(vector)
   end subroutine
   subroutine allocate_vector(vector,length)
     implicit none
     real(8), allocatable :: vector(:)
     integer              :: length
     allocate(vector(length))
+    !$acc enter data create(vector)
   end subroutine allocate_vector
   subroutine free_vector(vector)
     implicit none
     real(8), allocatable :: vector(:)
+    !$acc exit data delete(vector)
     deallocate(vector)
   end subroutine
   function dot(x, y)
@@ -28,7 +31,7 @@ module vector_mod
 
     length = size(x)
     tmpsum = 0.0
-    !$acc kernels
+    !$acc kernels present(x,y)
     do i=1,length
       tmpsum = tmpsum + x(i)*y(i)
     enddo
